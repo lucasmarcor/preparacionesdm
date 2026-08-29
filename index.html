@@ -140,6 +140,16 @@
   </footer>
 
   <script>
+    // --- MAPA DE PDF PARA DESCARGA ---
+    // REEMPLAZA las URLs por los enlaces 'raw' de tus archivos PDF en GitHub.
+    const pdfsPreparaciones = {
+      "Recolección de orina de 24 Horas": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%2024.pdf",
+      "Recolección de Orina de 24hs.": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%2024.pdf", // Variante de texto que hay en BD
+      "Recolección de Orina De Ayuno (2 Horas)": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%202%20horas.pdf",
+      "Catecolaminas urinarias con conservante.": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Catecolaminas%20Urinarias.pdf"
+    };
+    // ---------------------------------
+
     const reglasIncompatibilidades = [
       {
         grupoA: ["4018"], // Urocultivo
@@ -527,9 +537,19 @@
       if (preparacionesUnicas.size === 0) {
          htmlPreparaciones += `<p class="italic text-slate-500">No se requiere ninguna preparación específica para estos estudios.</p>`;
       } else {
-         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-3">`;
+         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-4">`; // Aumentado space-y
          Array.from(preparacionesUnicas).forEach(prep => {
-            htmlPreparaciones += `<li>${prep}</li>`;
+            htmlPreparaciones += `<li><span class="block mb-1">${prep}</span>`;
+            
+            // Si la preparación está en nuestro mapa, agregamos el botón de descarga
+            if (pdfsPreparaciones[prep]) {
+                htmlPreparaciones += `
+                <a href="${pdfsPreparaciones[prep]}" target="_blank" class="inline-flex items-center gap-1.5 mt-1 bg-pink-50 text-[#70006a] hover:bg-pink-100 border border-pink-200 px-3 py-1.5 rounded-lg text-sm font-semibold transition print:hidden shadow-sm">
+                  <i data-lucide="download" class="w-4 h-4"></i> Descargar Instructivo (PDF)
+                </a>`;
+            }
+            
+            htmlPreparaciones += `</li>`;
          });
          htmlPreparaciones += `</ul>`;
       }
@@ -594,7 +614,12 @@
       if (preparacionesUnicas.size > 0) {
         mensaje += "*Preparaciones adicionales:*\n";
         Array.from(preparacionesUnicas).forEach(prep => {
-            mensaje += `👉 ${prep}\n\n`;
+            mensaje += `👉 ${prep}\n`;
+            // Si la preparación tiene un PDF, lo sumamos al texto del WhatsApp
+            if (pdfsPreparaciones[prep]) {
+                mensaje += `📄 *Descargar instructivo detallado:* ${pdfsPreparaciones[prep]}\n`;
+            }
+            mensaje += `\n`;
         });
       } else {
         mensaje += "_No se requiere preparación específica._\n\n";
@@ -602,8 +627,6 @@
 
       mensaje += "⚠️ *Aviso importante:* _Su cumplimiento es imprescindible para garantizar la calidad de sus resultados._\n";
 
-      // Ya NO enviamos el parámetro phone. Solo enviamos el texto. 
-      // De esta forma, WhatsApp te preguntará a quién enviarlo.
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
       
       window.open(url, '_blank');
