@@ -3,27 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laboratorio Maipú - Preparaciones e Incompatibilidades</title>
+  <title>Laboratorio Maipú - Preparaciones para análisis clínicos by Lucas Rodriguez</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Estilos súper limpios y específicos para la Generación de PDF */
     @media print {
-      body {
-        background: white !important;
-        color: black !important;
+      header {
+        background-color: #70006a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      @page { margin: 1.5cm; }
-      
+      header > div > button, 
+      main > section:first-child, 
+      footer, 
+      .p-3.bg-slate-50.border-t.border-slate-200,
+      .print\:hidden { 
+        display: none !important;
+      }
       main {
-        display: block !important;
+        grid-template-columns: 1fr !important;
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
       }
-      
+      main > section:last-child,
+      main > section:last-child > div {
+        grid-column: 1 / -1 !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+      }
       h3, h4 { color: black !important; }
-      
       .prep-card {
         border: 1.5pt solid #ccc !important;
         margin-bottom: 15pt !important;
@@ -31,7 +43,6 @@
         page-break-inside: avoid;
         box-shadow: none !important;
       }
-      
       .disclaimer-print {
         border-left: 3pt solid #000 !important;
         background: white !important;
@@ -40,52 +51,50 @@
         margin-top: 15pt !important;
         padding: 10pt !important;
       }
-      
       .alert-print {
         border-left: 3pt solid #dc2626 !important;
         background: white !important;
         color: black !important;
-        page-break-inside: avoid;
       }
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      @page { margin: 1.5cm; }
     }
   </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col font-sans">
+<body class="bg-slate-50 text-slate-800 flex flex-col font-sans md:h-screen md:overflow-hidden">
 
-  <header class="bg-[#70006a] text-white py-5 px-4 shadow-md">
+  <header class="bg-[#70006a] text-white py-5 px-4 shadow-md flex-shrink-0">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
         <img src="image_0.png" alt="Logo de Laboratorio Maipú" class="h-14 w-auto">
         <div class="border-l-2 border-white h-12 ml-2 mr-3"></div>
-        <h1 class="text-xl sm:text-2xl font-bold leading-tight">Preparaciones para estudios de laboratorio</h1>
+        <h1 class="text-xl sm:text-2xl font-bold leading-tight">Preparaciones e indicaciones para análisis clínicos</h1>
       </div>
-      <button onclick="window.print()" class="flex md:hidden items-center gap-2 bg-pink-100 text-[#70006a] text-sm font-semibold px-4 py-2 rounded-lg transition shadow hover:bg-pink-200 print:hidden">
+      <button onclick="window.print()" class="flex md:hidden items-center gap-2 bg-pink-100 text-[#70006a] text-sm font-semibold px-4 py-2 rounded-lg transition shadow hover:bg-pink-200">
         <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
       </button>
     </div>
   </header>
 
-  <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 md:grid-cols-12 gap-6 my-6">
+  <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 md:grid-cols-12 gap-6 md:min-h-0 md:overflow-hidden my-4">
     
     <!-- Columna Izquierda -->
-    <section class="md:col-span-7 flex flex-col gap-4 print:hidden">
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-3">
+    <section class="md:col-span-7 flex flex-col gap-4 h-full md:min-h-0">
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-3 flex-shrink-0">
         <div class="flex flex-col sm:flex-row gap-3 w-full">
             <div class="relative flex-grow">
                 <i data-lucide="search" class="w-5 h-5 absolute left-3 top-2.5 text-slate-400"></i>
                 <input type="text" id="buscador" placeholder="Buscar estudio por nombre o código..." oninput="filtrarEstudios()" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#70006a] text-sm">
             </div>
-            <label for="orderFileInput" class="px-4 py-2.5 bg-pink-50 border border-pink-200 text-[#70006a] hover:bg-pink-100 rounded-lg text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap shadow-sm">
-                <i data-lucide="upload" class="w-4 h-4"></i>
-                Subir Orden (IA)
-            </label>
-            <input type="file" id="orderFileInput" accept="image/*,.pdf" class="hidden" onchange="handleOrderUpload(event)">
         </div>
         <div id="botonesCategorias" class="flex flex-wrap gap-1.5 pt-1"></div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-[460px]">
-        <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 font-semibold text-sm text-slate-700 flex justify-between items-center">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-grow md:min-h-0">
+        <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 font-semibold text-sm text-slate-700 flex justify-between items-center flex-shrink-0">
           <span>Estudios Disponibles</span>
           <span id="contadorDisponibles" class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">0</span>
         </div>
@@ -94,10 +103,12 @@
     </section>
 
     <!-- Columna Derecha -->
-    <section class="md:col-span-5 flex flex-col gap-4 print:block print:w-full">
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[584px] print:h-auto print:border-none print:shadow-none">
+    <section class="md:col-span-5 flex flex-col gap-4 h-full md:min-h-0">
+      
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col flex-grow md:min-h-0">
         
-        <div class="bg-pink-50 px-4 py-3 border-b border-pink-100 font-semibold text-sm text-[#70006a] flex justify-between items-center print:hidden">
+        <!-- Ocultos en impresión -->
+        <div class="bg-pink-50 px-4 py-3 border-b border-pink-100 font-semibold text-sm text-[#70006a] flex justify-between items-center print:hidden flex-shrink-0">
           <div class="flex items-center gap-2">
             <i data-lucide="check-square" class="w-4 h-4 text-[#70006a]"></i>
             <span>Estudios Seleccionados (<span id="contadorSeleccionados">0</span>)</span>
@@ -105,16 +116,17 @@
           <button onclick="limpiarSeleccion()" class="text-xs text-[#70006a] hover:underline font-medium">Limpiar todo</button>
         </div>
 
-        <div id="tagsSeleccionados" class="p-3 border-b border-slate-200 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto bg-slate-50/50 print:hidden">
+        <div id="tagsSeleccionados" class="p-3 border-b border-slate-200 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto bg-slate-50/50 print:hidden flex-shrink-0">
           <span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>
         </div>
 
-        <div class="flex-grow p-4 overflow-y-auto flex flex-col print:overflow-visible print:p-0">
+        <!-- Contenedor Principal (Visible en PDF) -->
+        <div class="flex-grow p-4 overflow-y-auto flex flex-col">
           <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5 print:hidden">
             <i data-lucide="info" class="w-4 h-4 text-[#70006a]"></i> Resumen de Indicaciones
           </h3>
           <div id="preparacionesContenedor" class="flex-grow">
-            <div class="text-center text-slate-500 py-12 print:hidden">
+            <div class="text-center text-slate-500 py-12">
               <i data-lucide="clipboard-list" class="w-16 h-16 mx-auto mb-4 text-slate-300"></i>
               <p class="text-lg">Tus indicaciones aparecerán aquí.</p>
               <p class="text-sm mt-2">Agregá estudios para detectar reglas e incompatibilidades.</p>
@@ -122,9 +134,9 @@
           </div>
         </div>
 
-        <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2 print:hidden">
+        <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2 print:hidden flex-shrink-0">
           <button onclick="window.print()" class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-3 rounded-lg transition text-sm shadow-sm">
-            <i data-lucide="printer" class="w-4 h-4"></i> Guardar en PDF
+            <i data-lucide="printer" class="w-4 h-4"></i> Guardar PDF
           </button>
           <button onclick="enviarWhatsApp()" id="btnWhatsApp" disabled class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 rounded-lg transition text-sm shadow-sm">
             <i data-lucide="message-circle" class="w-5 h-5"></i> Whatsapp
@@ -135,182 +147,59 @@
 
   </main>
 
-  <footer class="bg-[#70006a] text-white py-4 text-center text-sm mt-6 print:hidden">
+  <footer class="bg-[#70006a] text-white py-4 text-center text-sm flex-shrink-0 mt-auto">
     <p>Laboratorio Maipú © 2026 — Todos los derechos reservados</p>
   </footer>
 
   <script>
-    // --- MAPA DE PDF PARA DESCARGA ---
-    // REEMPLAZA las URLs por los enlaces 'raw' de tus archivos PDF en GitHub.
-    const pdfsPreparaciones = {
-      "Recolección de orina de 24 Horas": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%2024.pdf",
-      "Recolección de Orina de 24hs.": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%2024.pdf", // Variante de texto que hay en BD
-      "Recolección de Orina De Ayuno (2 Horas)": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Orina%202%20horas.pdf",
-      "Catecolaminas urinarias con conservante.": "https://raw.githubusercontent.com/lucasmarcor/preparacionesdm/blob/main/Catecolaminas%20Urinarias.pdf"
-    };
-    // ---------------------------------
-
     const reglasIncompatibilidades = [
-      {
-        grupoA: ["4018"], // Urocultivo
-        grupoB: ["4030"], // Streptococcus
-        mensaje: "UROCULTIVO CON CULTIVO DE STREPTOCOCCUS BETA HEMOLITICO: Urocultivo requiere higiene previa y el cultivo no debe higienizarse 12hs antes. No pueden tomarse al mismo tiempo."
-      },
-      {
-        grupoA: ["905", "191", "O24"], // Recolecciones de Orina 24hs
-        grupoB: ["4040"], // Orina completa
-        mensaje: "RECOLECCION DE ORINA DE 24HS CON ORINA COMPLETA: Debería aclarar cuando tiene orina completa, que es el mismo período de recolección pero la ultima orina debe ser por separado en otro envase estéril."
-      },
-      {
-        grupoA: ["167"], // Oxalato/Citrato
-        grupoB: ["4040"], // Orina completa
-        mensaje: "OXALATO/CITRATO URINARIO CON ORINA COMPLETA: Para Oxalato/citrato (recolección de orina de 24hs) tiene que recolectarse todas las orinas incluso la primera del segundo día. Tendría que dejar la orina completa pendiente y alcanzarla otro día."
-      },
-      {
-        grupoA: ["4019"], // Exudado uretral
-        grupoB: ["4018"], // Urocultivo
-        mensaje: "EXUDADO URETRAL CON UROCULTIVO: Urocultivo requiere higiene previa y el exudado no debe higienizarse 12hs antes."
-      },
-      {
-        grupoA: ["4019"], // Exudado uretral
-        grupoB: ["4031"], // Espermocultivo
-        mensaje: "EXUDADO URETRAL CON ESPERMOCULTIVO: Exudado uretral no debe higienizarse 12hs antes y el espermocultivo requiere higiene previa."
-      },
-      {
-        grupoA: ["4008"], // Flujo Vaginal
-        grupoB: ["4018"], // Urocultivo
-        mensaje: "CULTIVO DE FLUJO VAGINAL Y MATERIAL ENDOCERVICAL CON UROCULTIVO FEMENINO: Urocultivo requiere higiene previa y utilización de tampon. Para cultivo de flujo no debe higienizarse de manera profunda."
-      },
-      {
-        grupoA: ["143"], // Catecolaminas CON conservante
-        grupoB: ["143-S"], // Catecolaminas SIN conservante
-        mensaje: "CATECOLAMINAS URINARIAS (CON Y SIN CONSERVANTE): Si le piden de ambos casos debe hacer 2 recolecciones de 24 hs por separado. Una con conservante, retirando previamente el frasco, y otra sin conservante."
-      },
-      {
-        grupoA: ["2708"], // Catecolaminas plasmaticas
-        grupoB: ["19", "REN"], // Aldosterona / Renina
-        mensaje: "CATECOLAMINAS PLASMÁTICAS CON RENINA/ALDOSTERONA (Deambulación): Catecolaminas requiere reposo previo en sala de espera. Para las otras dos practicas con deambulación no puede estar en reposo. Debe hacerlo en días separados."
-      },
-      {
-        grupoA: ["AMET"], // Metilmalonico / Orgánicos
-        grupoB: ["905", "191", "O24"], // Recolecciones de Orina 24hs
-        mensaje: "ACIDO METILMALONICO/ACIDOS ORGANICOS EN ORINA CON RECOLECCION DE 24HS: Deben hacerse por separado. Metilmalónico/organicos son muestras aisladas durante esas horas y recolección de 24hs son todas las micciones."
-      },
-      {
-        grupoA: ["PROL", "189", "6"], // Prolactina, Cortisol, ACTH
-        grupoB: ["19", "REN"], // Aldosterona, Renina
-        mensaje: "PROLACTINA - CORTISOL - ACTH Y RENINA - ALDOSTERONA: Prolactina, cortisol y ACTH tiene que asistir 7.30hs para hacer la extracción a las 8, con reposo previo. Renina y Aldosterona debe concurrir entre las 8 y las 9 con reposo o deambulación segun lo indicado. Hacer en días separados o coordinar logística."
-      },
-      {
-        grupoA: ["PROL", "FSH", "LH", "1212", "75", "2711", "ESTR"], // Hormonas Fase 1
-        grupoB: ["PROG"], // Progesterona Fase Lútea
-        mensaje: "PERFIL HORMONAL CON PROGESTERONA: Los primeros se toman entre el día 3 y 5 del ciclo y la progesterona entre el 21 y 24 del mismo ciclo. Si están pedidos en la misma orden, deberá hacer dos extracciones en esos momentos diferentes, salvo otra indicación médica."
-      }
+      { grupoA: ["4018"], grupoB: ["4030"], mensaje: "UROCULTIVO CON CULTIVO DE STREPTOCOCCUS BETA HEMOLITICO: Urocultivo requiere higiene previa y el cultivo no debe higienizarse 12hs antes. No pueden tomarse al mismo tiempo." },
+      { grupoA: ["905", "191", "O24"], grupoB: ["4040"], mensaje: "RECOLECCION DE ORINA DE 24HS CON ORINA COMPLETA: La ultima orina debe ser recolectada en un frasco esteril aparte de la recolección de orina de 24 horas." },
+      { grupoA: ["167"], grupoB: ["4040"], mensaje: "OXALATO/CITRATO URINARIO CON ORINA COMPLETA: Para Oxalato/citrato (recolección de orina de 24hs) tiene que recolectarse todas las orinas incluso la primera del segundo día. Debe dejar la orina completa pendiente y alcanzarla en otro momento." },
+      { grupoA: ["4019"], grupoB: ["4018"], mensaje: "EXUDADO URETRAL CON UROCULTIVO: El estudio de urocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["4019"], grupoB: ["4031"], mensaje: "EXUDADO URETRAL CON ESPERMOCULTIVO: El estudio de espermocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["4008"], grupoB: ["4018"], mensaje: "CULTIVO DE FLUJO VAGINAL Y MATERIAL ENDOCERVICAL CON UROCULTIVO FEMENINO: El estudio de urocultivo requiere higiene previa de la zona genital. El cultivo de flujo requiere que no se haga higiene profunda de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["143"], grupoB: ["143-S"], mensaje: "CATECOLAMINAS URINARIAS (CON Y SIN CONSERVANTE): Si le piden de ambos casos debe hacer 2 recolecciones de 24 hs por separado. Una con conservante (retirando previamente el material por el laboratorio) y otra sin conservante." },
+      { grupoA: ["2708"], grupoB: ["19", "REN"], mensaje: "CATECOLAMINAS PLASMÁTICAS CON RENINA/ALDOSTERONA (Deambulación): Catecolaminas requiere reposo previo en sala de espera. Renina y aldosterona con deambulación no debe estar en reposo. Debe hacerlo en días separados." },
+      { grupoA: ["AMET"], grupoB: ["905", "191", "O24"], mensaje: "ACIDO METILMALONICO/ACIDOS ORGANICOS EN ORINA CON RECOLECCION DE 24HS: Deben hacerse por separado. Metilmalónico/organicos son muestras aisladas durante esas horas y recolección de 24hs son todas las micciones." },
+      { grupoA: ["PROL", "189", "6"], grupoB: ["19", "REN"], mensaje: "PROLACTINA - CORTISOL - ACTH Y RENINA - ALDOSTERONA: Prolactina, cortisol y ACTH debe asistir 7.30hs para hacer la extracción a las 8, con reposo previo. Renina y Aldosterona debe concurrir entre las 8 y las 9 con reposo o deambulación segun lo indicado. Hacer en días separados." },
+      { grupoA: ["PROL", "FSH", "LH", "1212", "75", "2711", "ESTR"], grupoB: ["PROG"], mensaje: "PERFIL HORMONAL CON PROGESTERONA: Los primeros se toman entre el día 3 y 5 del ciclo y la progesterona entre el 21 y 24 del mismo ciclo. Si están pedidos en la misma orden, deberá hacer dos extracciones en esos momentos diferentes, salvo otra indicación médica." }
     ];
 
     const estudiosBD = [
-      { codigo: "8055", nombre: "17 - Hidroxiprogesterona - Basal", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "8058", nombre: "17 - Hidroxiprogesterona post ACTH. 120MIN", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "8059", nombre: "17 - Hidroxiprogesterona post ACTH. 240 MIN", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "8056", nombre: "17 - Hidroxiprogesterona post ACTH. 30MIN", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "8125", nombre: "17 - Hidroxiprogesterona post ACTH. 300Min", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "8057", nombre: "17 - Hidroxiprogesterona post ACTH. 60Min", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "2872", nombre: "17- Hidroxiprogesterona post ACTH", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "1212", nombre: "17- Hidroxiprogesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Si tiene ciclo menstrual activo debe concurrir al laboratorio entre el día 21 y 24 desde su inicio." },
-      { codigo: "2811", nombre: "25-Hidroxi Vitamina D", categoria: "General", ayunoHoras: 8, preparacion: "Nuestro laboratorio solo realiza Vitamina D3. Puede beber agua con moderación." },
-      { codigo: "2711", nombre: "3 -Alfa Androstenodiol", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "7025", nombre: "5 Nucleotidasa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1019", nombre: "Ac anti Epstein barr (VCA-IGM)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1018", nombre: "Ac anti Epstein barr (VCA-IGG)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1447", nombre: "Deteccion de virus de Epstein barr PCR", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1394", nombre: "Ac anti Herpes HSV II IGG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2515", nombre: "Ac anti herpes HSV II IGM", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2514", nombre: "Ac anti herpes HSV I IGM", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1365", nombre: "Ac anti herpes Tipo 6 HSV 6 IGG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1380", nombre: "Ac anti herpes Tipo 6 HSV 6 IGM", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1339", nombre: "Decteccion de virus herpes simplex (hsv I Y II PCR)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1393", nombre: "Ac anti herpes HSV I IGG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "905", nombre: "Ac. Urico en orina de 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. Anotar fecha y hora. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad." },
-      { codigo: "487", nombre: "Acido 5 - Hidroxindolacetico", categoria: "Orina", ayunoHoras: 0, preparacion: "Importante: para poder recolectar la muestra de catecolaminas, deberá retirar previamente en el Laboratorio un KIT CON CONSERVANTE ACÍDO." },
-      { codigo: "352", nombre: "Acido Folico", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2703", nombre: "Acido Folico", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2702", nombre: "Acido Homovanilico", categoria: "Orina", ayunoHoras: 0, preparacion: "IMPORTANTE: Para poder recolectar la muestra requerida para este análisis, deberá retirar previamente en el Laboratorio un KIT CON CONSERVANTE ACÍDO." },
-      { codigo: "932", nombre: "Acido vainillin", categoria: "Orina", ayunoHoras: 0, preparacion: "IMPORTANTE: Para poder recolectar la muestra requerida para este análisis, deberá retirar previamente en el Laboratorio un KIT CON CONSERVANTE ACÍDO." },
-      { codigo: "904", nombre: "Acido urico", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "9051", nombre: "Acido Urico en orina espontanea", categoria: "Orina", ayunoHoras: 0, preparacion: "Juntar la primera orina de la mañana o en su defecto, tener una retención urinaria de por lo menos 3 horas." },
-      { codigo: "4041", nombre: "Acidos biliares", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "8150", nombre: "ACTH vespertino", categoria: "Hormonas", ayunoHoras: 8, preparacion: "La práctica se realiza entre las 16 y 17hs. Puede beber agua con moderación." },
-      { codigo: "6", nombre: "ACTH (matutino/ 8 am)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Debe concurrir a las 7:30hs para el trámite administrativo, la extracción se realizará entre las 8 y 9hs. Puede beber agua con moderación." },
-      { codigo: "2914", nombre: "Actividad del Factor VIII Coagulante", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1410", nombre: "Adenovirus IgG (IFI)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1408", nombre: "Adenovirus IgM (IFI)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2705", nombre: "Adrenalina en orina", categoria: "Orina", ayunoHoras: 0, preparacion: "IMPORTANTE: Para poder recolectar la muestra requerida para este análisis, deberá retirar previamente en el Laboratorio un KIT CON CONSERVANTE ACÍDO." },
-      { codigo: "874", nombre: "Alanina Aminotransferasa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "15", nombre: "Albumina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "18", nombre: "Aldolasa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "19", nombre: "Aldosterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "La toma de muestra se hace entre las 8 y 9hs." },
-      { codigo: "57", nombre: "Alfa 1 Antitripsina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "20", nombre: "Alfafetoproteina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "22", nombre: "Amilasa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "24", nombre: "Amilasa en orina", categoria: "Orina", ayunoHoras: 0, preparacion: "Juntar la primera orina de la mañana o en su defecto, tener una retención urinaria de por lo menos 3 horas." },
-      { codigo: "23", nombre: "Amilasa Urinaria", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de Orina de 24hs." },
-      { codigo: "75", nombre: "Androstenediona", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1757", nombre: "Anti fosfatidil colina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1758", nombre: "Anti GAD- Glutamic Acid Decarboxilase", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2302", nombre: "Anti Islote Langerhans-ICA", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "3781", nombre: "Anti Sacharomyses Ac IgG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1067", nombre: "Anti Sacharomyses Anticuerpo IgA", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1295", nombre: "Anti Tiroglobulina (ATG)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1543", nombre: "Anti Transglutaminasa IgA", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1544", nombre: "Anti Transglutaminasa IgG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "35", nombre: "Antibiograma", categoria: "Cultivos", ayunoHoras: 0, preparacion: "" },
-      { codigo: "1491", nombre: "Anticardiolipinas Igg", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1492", nombre: "Anticardiolipinas Igm", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1536", nombre: "Anticoagulante Lupico", categoria: "General", ayunoHoras: 8, preparacion: "Si se aplica heparina, postergar la dosis el día del estudio hasta luego de realizada la extracción de sangre. Si está en tratamiento con antibióticos, no realizarse el estudio." },
-      { codigo: "44", nombre: "Anticuerpos Anti Fracción Microsomal", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "4250", nombre: "Anticuerpos Anti HTLV I y II por PCR", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1315", nombre: "Anticuerpos anti Varicela Zoster IgG", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1267", nombre: "Anticuerpos anti Varicela Zoster IgM", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "51", nombre: "Antiestreptolisina O", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "144", nombre: "Antigeno Carcinoembrionario", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2915", nombre: "Antigeno de Von Willebrand", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1209", nombre: "Antigeno Prostatico Especifico (PSA)", categoria: "General", ayunoHoras: 8, preparacion: "Evitar las relaciones sexuales 72hs. antes de la toma de muestra. No realizar actividad física intensa 24hs previas al estudio, en especial bicicleta y no ingerir alcohol la noche anterior. No someterse a masajes prostáticos, tacto rectal y/o ecografía rectal en las 72 hs. previas. No realizar el estudio si cursa infección urinaria o fiebre, salvo indicación médica específica." },
-      { codigo: "2910", nombre: "Antitrombina III", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1292", nombre: "Apoproteina A", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1293", nombre: "Apoproteina B", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "873", nombre: "Aspartato Aminotransferasa (AST)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1533", nombre: "B2 Microglobulina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1534", nombre: "B2 Microglobulina En Orina", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de Orina de 24hs" },
-      { codigo: "110", nombre: "Bilirrubina (Directa / Total)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "180", nombre: "C3 Complemento", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2180", nombre: "C4 Complemento", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1645", nombre: "Cadenas Livianas en Orina", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de Orina de 24hs." },
-      { codigo: "133", nombre: "Calcio", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2848", nombre: "Calcio en Orina 2 hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de Orina De Ayuno (2 Horas)" },
-      { codigo: "136", nombre: "Calcio en Orina de 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de orina de 24 Horas" },
-      { codigo: "4832", nombre: "Calcio en orina espontánea", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección orina espontánea" },
-      { codigo: "134", nombre: "Calcio Ionico", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "1573", nombre: "Cannabinoides en Orina", categoria: "Orina", ayunoHoras: 0, preparacion: "La muestra debe ser recolectada en el laboratorio bajo vigilancia." },
-      { codigo: "1654", nombre: "Capacidad Total de Fijacion del Hierro", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2708", nombre: "Catecolaminas plasmaticas", categoria: "General", ayunoHoras: 8, preparacion: "Evitar fumar y situaciones de estrés." },
-      { codigo: "143", nombre: "Catecolaminas Urinarias", categoria: "Orina", ayunoHoras: 0, preparacion: "Catecolaminas urinarias con conservante." },
-      { codigo: "168", nombre: "Cloro en Sangre", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "172", nombre: "Cobre en Sangre", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "174", nombre: "Colesterol Total", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "179", nombre: "Complemento Total", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "184", nombre: "Coombs Directa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "186", nombre: "Coombs Indirecta Cuantitativa", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "192", nombre: "Creatinina", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "191", nombre: "Creatinina en Orina de 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de orina de 24 Horas" },
-      { codigo: "190", nombre: "Creatinquinasa (CPK)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2736", nombre: "Cross-Laps en Suero", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2621", nombre: "Dehidroepiandrosterona (DHEA)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "262", nombre: "Dehidroepiandrosterona Sulfato (DHEA-S)", categoria: "General", ayunoHoras: 8, preparacion: "Puede beber agua con moderación." },
-      { codigo: "2739", nombre: "Deoxipiridinolina en Orina de 2 hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolección de Orina De Ayuno (2 Horas)" },
-      { codigo: "4006", nombre: "Coprocultivo", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Coprocultivo" },
-      { codigo: "4008", nombre: "Cultivo de Flujo", categoria: "Cultivos", ayunoHoras: 0, preparacion: "La toma ideal debe hacerse entre los días 10 y 14 del ciclo menstrual. No aplicar óvulos ni cremas." },
-      { codigo: "4018", nombre: "Urocultivo (Cultivo de Primer Chorro de Orina)", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Requiere higiene previa exhaustiva. Recolectar la primera orina de la mañana." },
-      { codigo: "4030", nombre: "Cultivo de Streptococcus Beta Hemolítico", categoria: "Cultivos", ayunoHoras: 0, preparacion: "No debe higienizarse 12hs antes del estudio." },
+      { codigo: "212", nombre: "Vitamina D, 25OHVitD, Calecalciferol, Hidroxicolecalciferol, Calcidiol", categoria: "General", ayunoHoras: 2, preparacion: "Vitamina D: Solo se realiza Vitamina D3." },
+      { codigo: "45", nombre: "Ácido Fólico, Folato, Vitamina B9", categoria: "General", ayunoHoras: 2 },
+      { codigo: "4651", nombre: "Alanina Aminotransferasa, ALT, ALAT, TGP", categoria: "General", ayunoHoras: 2 },
+      { codigo: "546", nombre: "Antitransglutaminada IGA, TTG, ATGA", categoria: "General", ayunoHoras: 2 },
+      { codigo: "621", nombre: "Orina 24 horas", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina 24hs: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
+      { codigo: "324", nombre: "Cannabinoides en orina, Marihuana, TCH", categoria: "Orina", ayunoHoras: 0, preparacion: "Cannabinoides: La muestra de orina será recolectada en el laboratorio bajo vigilancia. Deberá tener una retención urinaria de 3 horas como mínimo." },
+      { codigo: "89", nombre: "Cortisol, Cortisol matutino, Cortisol 8hs", categoria: "Hormonas", ayunoHoras: 2, preparacion: "Cortisol: Deberá presentarse a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00hs previo reposo." },
+      { codigo: "471", nombre: "Estradiol, E2", categoria: "General", ayunoHoras: 2 },
+      { codigo: "5018", nombre: "Colesterol Total, CT", categoria: "General", ayunoHoras: 8 },
+      { codigo: "63", nombre: "HIV I y II", categoria: "General", ayunoHoras: 2, preparacion: "HIV requiere presentar orden médica sí o sí." },
+      { codigo: "4075", nombre: "17-Hidroxiprogesterona, 17OHP4, 17 Alfa Hidroxiprogesterona", categoria: "General", ayunoHoras: 2, preparacion: "Progesterona: Realizar entre el día 21 y 24 del ciclo menstrual" },
+      { codigo: "4030", nombre: "Cultivo de Streptococcus Beta Hemolítico, SHBG", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Streptococcus: Deberá suspender antibióticos y relaciones sexuales 48 horas antes y no realizar higiene de la zona genital durante las 12 horas previas a la toma de la muestra." },
+      { codigo: "O24", nombre: "Creatinina en Orina, Clearence de creatinina", categoria: "Orina", ayunoHoras: 0, preparacion: "Clearence de creatinina: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. Anotar fecha y hora. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
+      { codigo: "167", nombre: "Oxalato y Citrato en Orina 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Oxalato: Evite 48 horas antes de realizar la recolección de orina tomar ácido ascórbico, té, mate, café y chocolate o comer alimentos que contengan oxalato como las espinacas, frutillas, tomates. Recolección de la muestra: Descarte la primera orina de la mañana, vaciando totalmente su vejiga, anote la hora. A partir de ese momento y hasta la misma hora del día siguiente, junte la totalidad de orina emitida, incluyendo la última. Es muy importante que no pierda ninguna de las muestras, ya que esto altera los resultados. Ejemplo: si se levanta a las 7:00hs. descarte esa primera orina y junte todas las muestras hasta las 7:00hs. de la mañana del día siguiente, incluyendo esta última muestra." },
+      { codigo: "4079", nombre: "Cultivo de Exudado Uretral", categoria: "Cultivos", ayunoHoras: 0, preparacion: "" },
+      { codigo: "4031", nombre: "Colesterol LDL, LDL", categoria: "General", ayunoHoras: 8 },
+      { codigo: "4008", nombre: "Cultivo de Flujo Vaginal y Endocervical", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Flujo: La toma de muestra se debe realizar entre el día 10 y 14 del ciclo menstrual. Deberá suspender relaciones sexuales y antibióticos 48 horas antes." },
+      { codigo: "143", nombre: "Catecolaminas Urinarias con conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Retirar frasco con conservante ácido del laboratorio previamente." },
+      { codigo: "143-S", nombre: "Catecolaminas Urinarias sin conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolectar orina 24hs en envase limpio sin agregados químicos." },
+      { codigo: "2708", nombre: "Catecolaminas Plasmáticas", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Requiere reposo previo prolongado en la sala de espera." },
+      { codigo: "19", nombre: "Aldosterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
+      { codigo: "REN", nombre: "Renina", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
+      { codigo: "4853", nombre: "Gonadotrofina Corionica Humana, HCG, Sub unidad Beta, SHBG", categoria: "General", ayunoHoras: 2},
+      { codigo: "4874", nombre: "Hemograma, HMG", categoria: "General", ayunoHoras: 2},
+      { codigo: "PROL", nombre: "Prolactina, PRL", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Asistir 7:30hs, reposo previo, extracción a las 8:00hs." },
+      { codigo: "6", nombre: "ACTH (Matutino 8am)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Prolactina: 24hs de abstinencia sexual, deberá contar con 2 horas de vigilia. Presentar a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00 previo reposo." },
+      { codigo: "FSH", nombre: "FSH (Hormona Foliculoestimulante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "LH", nombre: "LH (Hormona Luteinizante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "1212", nombre: "17-Hidroxiprogesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
+      { codigo: "ESTR", nombre: "Estradiol", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Estradiol: Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "PROG", nombre: "Progesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
+      { codigo: "15", nombre: "Albúmina en Sangre", categoria: "General", ayunoHoras: 8, preparacion: "Sin preparación específica." },
+      { codigo: "4040", nombre: "Orina Completa", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina Completa: Recolectar el chorro medio de una orina que tenga 3 horas de retención como mínimo, previa higiene de la zona genital." }
     ];
 
     let seleccionados = [];
@@ -322,39 +211,6 @@
       if (typeof lucide !== 'undefined') lucide.createIcons();
     });
 
-    function handleOrderUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = 'fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4';
-        loadingDiv.innerHTML = `
-            <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-3 shadow-2xl">
-                <div class="w-10 h-10 border-4 border-pink-200 border-t-[#70006a] rounded-full animate-spin mx-auto"></div>
-                <h4 class="font-bold text-slate-800 text-base">Analizando orden con IA...</h4>
-                <p class="text-xs text-slate-500">Buscando incompatibilidades...</p>
-            </div>
-        `;
-        document.body.appendChild(loadingDiv);
-
-        setTimeout(() => {
-            document.body.removeChild(loadingDiv);
-            
-            const detectedCodes = ["4018", "4030", "15"]; 
-            detectedCodes.forEach(code => {
-                const estudio = estudiosBD.find(e => e.codigo === code);
-                if (estudio && !seleccionados.some(s => s.codigo === code)) {
-                    seleccionados.push(estudio);
-                }
-            });
-
-            filtrarEstudios();
-            actualizarSeleccion();
-            actualizarPreparaciones();
-            event.target.value = ''; 
-        }, 2000);
-    }
-
     function cargarBotonesCategorias() {
       const contenedor = document.getElementById("botonesCategorias");
       const categorias = [...new Set(estudiosBD.map(e => e.categoria))];
@@ -362,9 +218,9 @@
 
       let html = `<button onclick="filtrarPorCategoria('')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${categoriaSeleccionada === '' ? 'bg-[#70006a] text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">📋 Todos</button>`;
       categorias.forEach(cat => {
-        const emoji = emojis[cat] || "🏷️";
+        const emoji = emojis[cat] || "🏷";
         const activo = categoriaSeleccionada === cat;
-        html += `<button onclick="filtrarPorCategoria('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${activo ? 'bg-[#70006a] text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${emoji} ${cat}</button>`;
+        html += `<button onclick="filtrarPorCategoria('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${activo ? 'bg-[#70006a] text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${emoji}${cat}</button>`;
       });
       contenedor.innerHTML = html;
     }
@@ -491,7 +347,7 @@
 
       if (alertasIncompatibilidad.length > 0) {
           htmlPreparaciones += `
-            <div class="flex items-start gap-2.5 text-rose-800 bg-rose-50 p-4 rounded-xl text-sm md:text-base mb-4 border border-rose-200 shadow-sm alert-print">
+            <div class="flex items-start gap-2.5 text-rose-800 bg-rose-50 p-4 rounded-xl mb-4 border border-rose-200 shadow-sm alert-print" style="font-size: 72%;">
               <i data-lucide="alert-triangle" class="w-6 h-6 flex-shrink-0 mt-0.5 print:hidden text-rose-600"></i>
               <div>
                   <strong class="block mb-2 text-rose-900 text-base">¡Atención! Incompatibilidad detectada:</strong>
@@ -510,7 +366,7 @@
                <i data-lucide="list-checks" class="w-5 h-5 text-indigo-500 print:hidden"></i>
                Estudios a realizar:
             </h3>
-            <ul class="list-disc pl-5 text-slate-700 text-sm md:text-base space-y-1">
+            <ul class="list-disc pl-5 text-slate-700 space-y-1" style="font-size: 72%;">
               ${nombresEstudios.map(nombre => `<li><strong>${nombre}</strong></li>`).join('')}
             </ul>
           </div>
@@ -518,7 +374,7 @@
 
       if (maxAyuno > 0) {
         htmlPreparaciones += `
-          <div class="flex items-center gap-2 text-amber-800 bg-amber-50 px-4 py-3 rounded-lg text-sm md:text-base mb-5 border border-amber-200">
+          <div class="flex items-center gap-2 text-amber-800 bg-amber-50 px-4 py-3 rounded-lg mb-5 border border-amber-200" style="font-size: 72%;">
             <i data-lucide="clock" class="w-5 h-5 flex-shrink-0 print:hidden"></i>
             <span><strong>Ayuno Mínimo Requerido:</strong> Se requiere un ayuno de <strong>${maxAyuno} horas</strong> antes de la extracción.</span>
           </div>
@@ -531,25 +387,15 @@
               <i data-lucide="info" class="w-5 h-5 text-indigo-500 print:hidden"></i>
               Preparaciones adicionales necesarias:
             </h4>
-            <div class="text-slate-700 text-sm md:text-base leading-relaxed">
+            <div class="text-slate-700 leading-relaxed" style="font-size: 72%;">
       `;
 
       if (preparacionesUnicas.size === 0) {
          htmlPreparaciones += `<p class="italic text-slate-500">No se requiere ninguna preparación específica para estos estudios.</p>`;
       } else {
-         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-4">`; // Aumentado space-y
+         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-3">`;
          Array.from(preparacionesUnicas).forEach(prep => {
-            htmlPreparaciones += `<li><span class="block mb-1">${prep}</span>`;
-            
-            // Si la preparación está en nuestro mapa, agregamos el botón de descarga
-            if (pdfsPreparaciones[prep]) {
-                htmlPreparaciones += `
-                <a href="${pdfsPreparaciones[prep]}" target="_blank" class="inline-flex items-center gap-1.5 mt-1 bg-pink-50 text-[#70006a] hover:bg-pink-100 border border-pink-200 px-3 py-1.5 rounded-lg text-sm font-semibold transition print:hidden shadow-sm">
-                  <i data-lucide="download" class="w-4 h-4"></i> Descargar Instructivo (PDF)
-                </a>`;
-            }
-            
-            htmlPreparaciones += `</li>`;
+            htmlPreparaciones += `<li>${prep}</li>`;
          });
          htmlPreparaciones += `</ul>`;
       }
@@ -560,7 +406,7 @@
         </div>
         
         <div class="mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-700 rounded-r-lg shadow-sm disclaimer-print">
-            <p class="text-indigo-900 print:text-black text-sm md:text-base font-medium flex items-start gap-2">
+            <p class="text-indigo-900 print:text-black font-medium flex items-start gap-2" style="font-size: 72%;">
                 <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5 text-indigo-700 print:hidden"></i>
                 <span><strong>Aviso importante:</strong> Lea atentamente estas instrucciones, su cumplimiento es imprescindible para garantizar la calidad de sus resultados.</span>
             </p>
@@ -614,12 +460,7 @@
       if (preparacionesUnicas.size > 0) {
         mensaje += "*Preparaciones adicionales:*\n";
         Array.from(preparacionesUnicas).forEach(prep => {
-            mensaje += `👉 ${prep}\n`;
-            // Si la preparación tiene un PDF, lo sumamos al texto del WhatsApp
-            if (pdfsPreparaciones[prep]) {
-                mensaje += `📄 *Descargar instructivo detallado:* ${pdfsPreparaciones[prep]}\n`;
-            }
-            mensaje += `\n`;
+            mensaje += `👉 ${prep}\n\n`;
         });
       } else {
         mensaje += "_No se requiere preparación específica._\n\n";
@@ -628,7 +469,6 @@
       mensaje += "⚠️ *Aviso importante:* _Su cumplimiento es imprescindible para garantizar la calidad de sus resultados._\n";
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
-      
       window.open(url, '_blank');
     }
   </script>
