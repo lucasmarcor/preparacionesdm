@@ -3,473 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laboratorio Maipú - Preparaciones para análisis clínicos by Lucas Rodriguez</title>
+  <title>Presentación — Sitio de Preparaciones</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    @media print {
-      header {
-        background-color: #70006a !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      header > div > button, 
-      main > section:first-child, 
-      footer, 
-      .p-3.bg-slate-50.border-t.border-slate-200,
-      .print\:hidden { 
-        display: none !important;
-      }
-      main {
-        grid-template-columns: 1fr !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-      main > section:last-child,
-      main > section:last-child > div {
-        grid-column: 1 / -1 !important;
-        box-shadow: none !important;
-        border: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: auto !important;
-      }
-      h3, h4 { color: black !important; }
-      .prep-card {
-        border: 1.5pt solid #ccc !important;
-        margin-bottom: 15pt !important;
-        padding: 15pt !important;
-        page-break-inside: avoid;
-        box-shadow: none !important;
-      }
-      .disclaimer-print {
-        border-left: 3pt solid #000 !important;
-        background: white !important;
-        color: black !important;
-        page-break-inside: avoid;
-        margin-top: 15pt !important;
-        padding: 10pt !important;
-      }
-      .alert-print {
-        border-left: 3pt solid #dc2626 !important;
-        background: white !important;
-        color: black !important;
-      }
-      body {
-        background: white !important;
-        color: black !important;
-      }
-      @page { margin: 1.5cm; }
+    /* Estilos para el zoom/lightbox de imágenes */
+    .image-zoomable {
+      cursor: zoom-in;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .image-zoomable:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col font-sans md:h-screen md:overflow-hidden">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-purple-500 selection:text-white">
 
-  <header class="bg-[#70006a] text-white py-5 px-4 shadow-md flex-shrink-0">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-3">
-        <img src="image_0.png" alt="Logo de Laboratorio Maipú" class="h-14 w-auto">
-        <div class="border-l-2 border-white h-12 ml-2 mr-3"></div>
-        <h1 class="text-xl sm:text-2xl font-bold leading-tight">Preparaciones e indicaciones para análisis clínicos</h1>
-      </div>
-      <button onclick="window.print()" class="flex md:hidden items-center gap-2 bg-pink-100 text-[#70006a] text-sm font-semibold px-4 py-2 rounded-lg transition shadow hover:bg-pink-200">
-        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
-      </button>
-    </div>
-  </header>
-
-  <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 md:grid-cols-12 gap-6 md:min-h-0 md:overflow-hidden my-4">
-    
-    <!-- Columna Izquierda -->
-    <section class="md:col-span-7 flex flex-col gap-4 h-full md:min-h-0">
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-3 flex-shrink-0">
-        <div class="flex flex-col sm:flex-row gap-3 w-full">
-            <div class="relative flex-grow">
-                <i data-lucide="search" class="w-5 h-5 absolute left-3 top-2.5 text-slate-400"></i>
-                <input type="text" id="buscador" placeholder="Buscar estudio por nombre o código..." oninput="filtrarEstudios()" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#70006a] text-sm">
-            </div>
-        </div>
-        <div id="botonesCategorias" class="flex flex-wrap gap-1.5 pt-1"></div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-grow md:min-h-0">
-        <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 font-semibold text-sm text-slate-700 flex justify-between items-center flex-shrink-0">
-          <span>Estudios Disponibles</span>
-          <span id="contadorDisponibles" class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">0</span>
-        </div>
-        <div id="listaEstudios" class="overflow-y-auto p-3 space-y-2 flex-grow"></div>
-      </div>
-    </section>
-
-    <!-- Columna Derecha -->
-    <section class="md:col-span-5 flex flex-col gap-4 h-full md:min-h-0">
+  <!-- Hero Section Main -->
+  <main class="flex-grow flex items-center justify-center py-16 px-6">
+    <div class="max-w-3xl text-center space-y-8">
       
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col flex-grow md:min-h-0">
+      <!-- Logo logodm -->
+      <img src="logodm.png" alt="Logo DM" class="mx-auto h-24 w-auto object-contain mb-4" />
+
+      <!-- Título Principal -->
+      <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
+        Nueva web de <br>
+        <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+          preparaciones de laboratorio
+        </span>
+      </h1>
+
+      <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+        Plataforma interactiva diseñada para guiar al paciente y optimizar la autogestión de preparaciones de estudios médicos.
+      </p>
+
+      <!-- Botones Principales -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
         
-        <!-- Ocultos en impresión -->
-        <div class="bg-pink-50 px-4 py-3 border-b border-pink-100 font-semibold text-sm text-[#70006a] flex justify-between items-center print:hidden flex-shrink-0">
-          <div class="flex items-center gap-2">
-            <i data-lucide="check-square" class="w-4 h-4 text-[#70006a]"></i>
-            <span>Estudios Seleccionados (<span id="contadorSeleccionados">0</span>)</span>
-          </div>
-          <button onclick="limpiarSeleccion()" class="text-xs text-[#70006a] hover:underline font-medium">Limpiar todo</button>
-        </div>
+        <!-- Botón Demo -->
+        <a href="labosinia.html" class="w-full sm:w-auto px-8 py-4 bg-[#70006a] hover:bg-purple-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-purple-900/40 hover:shadow-purple-900/60 flex items-center justify-center gap-3 text-sm group">
+          <i data-lucide="external-link" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+          Ver Demo en Vivo
+        </a>
 
-        <div id="tagsSeleccionados" class="p-3 border-b border-slate-200 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto bg-slate-50/50 print:hidden flex-shrink-0">
-          <span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>
-        </div>
+        <!-- Botón Modal Documento -->
+        <button onclick="openDocModal()" class="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold rounded-2xl transition-all flex items-center justify-center gap-3 text-sm group">
+          <i data-lucide="file-text" class="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform"></i>
+          Ver Documento del Proyecto
+        </button>
 
-        <!-- Contenedor Principal (Visible en PDF) -->
-        <div class="flex-grow p-4 overflow-y-auto flex flex-col">
-          <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5 print:hidden">
-            <i data-lucide="info" class="w-4 h-4 text-[#70006a]"></i> Resumen de Indicaciones
-          </h3>
-          <div id="preparacionesContenedor" class="flex-grow">
-            <div class="text-center text-slate-500 py-12">
-              <i data-lucide="clipboard-list" class="w-16 h-16 mx-auto mb-4 text-slate-300"></i>
-              <p class="text-lg">Tus indicaciones aparecerán aquí.</p>
-              <p class="text-sm mt-2">Agregá estudios para detectar reglas e incompatibilidades.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2 print:hidden flex-shrink-0">
-          <button onclick="window.print()" class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-3 rounded-lg transition text-sm shadow-sm">
-            <i data-lucide="printer" class="w-4 h-4"></i> Guardar PDF
-          </button>
-          <button onclick="enviarWhatsApp()" id="btnWhatsApp" disabled class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 rounded-lg transition text-sm shadow-sm">
-            <i data-lucide="message-circle" class="w-5 h-5"></i> Whatsapp
-          </button>
-        </div>
       </div>
-    </section>
 
+    </div>
   </main>
 
-  <footer class="bg-[#70006a] text-white py-4 text-center text-sm flex-shrink-0 mt-auto">
-    <p>Laboratorio Maipú © 2026 — Todos los derechos reservados</p>
-  </footer>
+  <!-- MODAL: DOCUMENTO DEL PROYECTO -->
+  <div id="docModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4 sm:p-6">
+    <div class="bg-white text-slate-800 rounded-2xl max-w-4xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-slate-100 border-b border-slate-200 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-100 text-blue-700 rounded-lg">
+            <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm sm:text-base">Documento de Proyecto: Laboratorio Maipú</h3>
+            <p class="text-xs text-slate-500">Informe técnico e impacto operativo</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="closeDocModal()" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Visor del Documento en HTML) -->
+      <div class="flex-1 overflow-y-auto p-6 sm:p-10 space-y-6 text-sm leading-relaxed text-slate-700 bg-slate-50">
+        
+        <div class="max-w-3xl mx-auto bg-white p-8 sm:p-12 rounded-xl border border-slate-200 shadow-sm space-y-6">
+          
+          <div class="border-b border-slate-200 pb-4">
+            <h2 class="text-2xl font-bold text-slate-900 mt-1">Laboratorio Maipú conmigo: Optimizando el primer contacto</h2>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-900 border-l-4 border-purple-700 pl-3">I. Introducción: La experiencia comienza antes de llegar</h3>
+          <p>Nuestro slogan afirma que somos "El mejor lugar para venir aunque no tengas ganas". Sabemos que nadie se despierta con ganas de sacarse sangre o realizarse estudios médicos; es una obligación que muchas veces genera ansiedad, incertidumbre y estrés. Nuestro compromiso, entonces, es hacer que todo el proceso sea lo más amable, rápido y sencillo posible.</p>
+          <p>Sin embargo, para cumplir realmente con esta promesa, debemos entender que la experiencia del paciente no comienza cuando cruza la puerta de nuestras sucursales, sino que empieza mucho antes: en su casa, frente a una pantalla, con una orden médica en la mano y la necesidad de entender qué debe hacer. Ese es nuestro primer punto de contacto.</p>
+          <p>Si ese acercamiento inicial es frustrante, si las indicaciones no son claras o si requiere un esfuerzo extra para conseguir una respuesta básica, ya estamos fallando en nuestro objetivo antes de que el paciente llegue al laboratorio. Le estamos exigiendo energía extra a alguien que, de por sí, "no tiene ganas" de hacer este trámite.</p>
+          <p>Este documento detalla la problemática operativa y de servicio que enfrentamos actualmente debido a las limitaciones de nuestra plataforma digital, y presenta una solución: la nueva web de preparaciones. El objetivo de este proyecto es transformar ese primer contacto en una experiencia de autogestión simple y resolutiva, que le demuestre al paciente, desde el primer clic, por qué somos el mejor lugar para cuidarse.</p>
+
+          <h3 class="text-lg font-bold text-slate-900 border-l-4 border-purple-700 pl-3">II. Situación Actual: El impacto operativo de la fricción digital</h3>
+          <p>Las métricas actuales nos indican que estamos generando un obstáculo y sumando estrés mucho antes de que el paciente llegue al laboratorio. Cuando la plataforma digital falla se traduce en una sobrecarga de nuestros canales de atención.</p>
+          <p>Para dimensionar el problema, basta con observar el volumen de contacto reciente. Nuestro promedio general es de aproximadamente 2.600 consultas mensuales entre todos los canales (teléfono y emails): entre el 1 y el 24 de agosto, recibimos 1.636 llamados y 763 correos electrónicos. Esto significa que el equipo está absorbiendo una demanda operativa muy alta para responder preguntas que deberían estar automatizadas.</p>
+          <p>¿Por qué se saturan nuestros canales? El feedback recurrente que recibimos durante esos cientos de llamados expone las falencias de nuestra web actual:</p>
+          
+          <div class="my-4">
+            <img src="imagen1.png" alt="Falencias de la web actual" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/800x400/f8fafc/64748b?text=Subir+imagen1.png'"/>
+          </div>
+
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>Información confusa:</strong> Los pacientes manifiestan directamente que la información presentada en la web no es clara ni fácil de interpretar.</li>
+            <li><strong>Buscador ineficiente:</strong> La herramienta de búsqueda no encuentra las prácticas solicitadas, dejando al paciente sin respuestas.</li>
+            <li><strong>Falta de contexto:</strong> El listado de preparaciones no indica qué tipo de estudio es el que debe realizarse, lo que genera dudas sobre si están leyendo las indicaciones correctas.</li>
+            <li><strong>Navegación fragmentada:</strong> El paciente se ve obligado a buscar las indicaciones práctica por práctica de forma individual, una tarea que suma ansiedad al proceso.</li>
+          </ul>
+
+          <p>Este escenario genera un círculo vicioso: ante una web que no resuelve sus dudas, el paciente llama por teléfono; al haber cientos de pacientes llamando al mismo tiempo por el mismo motivo, las líneas se saturan. El resultado final es otra queja muy frecuente: "Es difícil comunicarse con el laboratorio".</p>
+          <p>En lugar de allanarles el camino, la experiencia digital actual les genera trabas y demoras, y nos aleja del objetivo de ser el mejor lugar para venir.</p>
+
+          <h3 class="text-lg font-bold text-slate-900 border-l-4 border-purple-700 pl-3">III. Ventaja Competitiva: Un paso adelante en el mercado</h3>
+          <p>En el rubro de la salud, y específicamente en los laboratorios de análisis clínicos, la norma general es ofrecer sitios web estáticos, poco amigables y centrados en la burocracia en lugar de en el usuario. Si observamos a nuestros principales competidores, sus plataformas sufren de los mismos problemas que enfrentamos nosotros hoy: buscadores deficientes, listados interminables y falta de claridad que obligan al paciente a levantar el teléfono[cite: 4].</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+            <img src="imagen2.png" alt="Competencia 1" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen2.png'"/>
+            <img src="imagen3.png" alt="Competencia 2" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen3.png'"/>
+            <img src="imagen4.png" alt="Competencia 3" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen4.png'"/>
+            <img src="imagen5.png" alt="Competencia 4" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen5.png'"/>
+          </div>
+
+          <p>Esta debilidad generalizada del mercado es una gran oportunidad para nosotros. Al implementar la nueva web de preparaciones, no solo estamos resolviendo un cuello de botella operativo interno, sino que nos estamos desmarcando de la competencia de manera contundente. Pasamos de ofrecer un estándar promedio a ser pioneros en brindar una experiencia digital 100% centrada en el paciente.</p>
+          <p>Mientras otros laboratorios siguen frustrando a las personas con indicaciones confusas y obligándolas a esperar en líneas telefónicas saturadas, nosotros les ofrecemos autonomía, rapidez y tranquilidad desde sus propios dispositivos[cite: 4]. Esta es una ventaja competitiva real que fideliza al paciente. Por contraste directo con la competencia, esta innovación tecnológica reafirma nuestro diferencial y demuestra con hechos por qué somos "el mejor lugar para venir aunque no tengas ganas".</p>
+
+          <h3 class="text-lg font-bold text-slate-900 border-l-4 border-purple-700 pl-3">IV. La Solución: Autogestión inteligente y a medida</h3>
+          <p>Para transformar verdaderamente el primer contacto de nuestros pacientes y reducir la saturación de nuestros canales de atención, proponemos el desarrollo de una nueva web de preparaciones. El salto cualitativo radica en pasar de un sitio estático (donde el paciente debe investigar) a una plataforma inteligente y dinámica que hace el trabajo por él.</p>
+          
+          <div class="my-4">
+            <img src="imagen6.png" alt="Solución principal" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/800x400/f8fafc/64748b?text=Subir+imagen6.png'"/>
+          </div>
+
+          <p>La nueva web estará impulsada por tecnología y diseño centrado en el usuario, destacando las siguientes funcionalidades clave:</p>
+          <ul class="list-disc pl-5 space-y-4">
+            <li>
+              <strong>Consolidación de indicaciones (Sin repeticiones):</strong> En lugar de mostrar condiciones aisladas y superpuestas que marean al paciente (el problema de "buscar práctica por práctica"), el nuevo sistema agrupará la información. Si varias prácticas comparten requisitos (como 8 horas de ayuno), el sitio generará un único texto consolidado y claro, creando un paso a paso definitivo y fácil de seguir.
+              <img src="imagen7.png" alt="Consolidación" onclick="zoomImage(this.src)" class="mt-2 w-2/3 h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/600x300/f8fafc/64748b?text=Subir+imagen7.png'"/>
+            </li>
+            <li>
+              <strong>Buscador manual preciso y ágil:</strong> Contaremos con un buscador optimizado que encuentra exactamente lo que se necesita sin arrojar errores. Las prácticas seleccionadas se irán agregando a un listado unificado, aplicando la misma lógica de no repetición de preparaciones.
+              <img src="imagen8.png" alt="Buscador" onclick="zoomImage(this.src)" class="mt-2 w-2/3 h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/600x200/f8fafc/64748b?text=Subir+imagen8.png'"/>
+            </li>
+            <li>
+              <strong>Detección de incompatibilidades:</strong> Al seleccionar practicas que requieren preparaciones distintas que no son compatibles entre si el sistema detectará eso y avisará al paciente que los estudios deberá hacerlos en distintos momentos, evitando malentendido y frustación en la recepción al momento de hacer el estudio.
+              <img src="imagen9.png" alt="Incompatibilidades" onclick="zoomImage(this.src)" class="mt-2 w-2/3 h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/600x200/f8fafc/64748b?text=Subir+imagen9.png'"/>
+            </li>
+            <li>
+              <strong>Portabilidad y accesibilidad (PDF y WhatsApp):</strong> Una vez que el paciente tiene su preparación lista y consolidada, el sitio le permitirá generar un archivo PDF para descargar, o bien compartir las indicaciones directamente vía WhatsApp con un solo clic. La información viaja con el paciente, dándole seguridad para el día del estudio.
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <img src="imagen10.png" alt="PDF" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen10.png'"/>
+                <img src="imagen11.png" alt="WhatsApp" onclick="zoomImage(this.src)" class="w-full h-auto object-cover rounded-xl border border-slate-200 shadow-sm image-zoomable" onerror="this.src='https://placehold.co/400x300/f8fafc/64748b?text=Subir+imagen11.png'"/>
+              </div>
+            </li>
+          </ul>
+
+          <p><strong>El impacto en nuestra operación diaria:</strong> Al brindarle al paciente una herramienta precisa y fácil de usar, atenuamos la incertidumbre. Si la web le dice exactamente qué hacer, cómo hacerlo y se lo envía al celular en segundos, no hay necesidad de levantar el teléfono ni enviar un mail[cite: 4]. Esta autogestión eficiente es la clave para desinflar ese volumen de más de 2.600 consultas mensuales, asegurando que el paciente llegue al laboratorio seguro, preparado y tranquilo y, además, devolviéndole tiempo valioso a nuestro equipo para gestionar más eficazmente las consultas de aquellas personas que no se llevan bien con la tecnología.</p>
+
+          <h3 class="text-lg font-bold text-slate-900 border-l-4 border-purple-700 pl-3">V. Conclusión: Haciendo honor a nuestra promesa</h3>
+          <p>La saturación actual de nuestros canales de atención es un síntoma claro de que el modelo tradicional de información ya no es suficiente[cite: 4]. Mantener el modelo actual significa seguir invirtiendo tiempo de nuestro equipo en resolver dudas operativas, mientras sometemos al paciente a un proceso confuso y burocrático.</p>
+          <p>La implementación de la nueva web de preparaciones es un cambio de paradigma en nuestra forma de brindar servicio. Al integrar consolidar las indicaciones y permitir la autogestión directa vía PDF o WhatsApp, estamos transformando un proceso que históricamente genera ansiedad en una experiencia fluida, segura y empática.</p>
+          <p>Este proyecto nos otorga un doble triunfo: por un lado, fidelizamos a nuestros pacientes al mejorar su experiencia con nuestro servicio; por el otro, nos posicionamos muy por encima de la competencia al ofrecer una herramienta de innovación líder en el mercado.</p>
+          <p>Al final del día, demostrar que somos "El mejor lugar para venir aunque no tengas ganas" no se trata solo de tener buenas instalaciones o profesionales amables en la sucursal. Se trata de cuidar el tiempo y la tranquilidad de las personas desde el momento cero. Con esta nueva web, le decimos al paciente: sabemos que este trámite da fiaca, por eso ya hicimos el trabajo difícil por vos. Así, garantizamos que su experiencia sea la mejor posible, desde el primer clic en su casa hasta que cruza nuestra puerta.</p>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 bg-slate-100 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <span>Vista previa de documento</span>
+        <button onclick="closeDocModal()" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-medium hover:bg-slate-900 transition">
+          Cerrar Vista Previa
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX / ZOOM DE IMÁGENES -->
+  <div id="imageLightbox" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4 cursor-zoom-out" onclick="closeZoom()">
+    <div class="relative max-w-5xl w-full flex flex-col items-center">
+      <img id="zoomedImage" src="" alt="Imagen Ampliada" class="max-h-[90vh] w-auto rounded-lg shadow-2xl object-contain">
+      <p class="text-white text-xs mt-3 bg-black/50 px-3 py-1 rounded-full">Toca en cualquier parte para cerrar</p>
+    </div>
+  </div>
 
   <script>
-    const reglasIncompatibilidades = [
-      { grupoA: ["4018"], grupoB: ["4030"], mensaje: "UROCULTIVO CON CULTIVO DE STREPTOCOCCUS BETA HEMOLITICO: Urocultivo requiere higiene previa y el cultivo no debe higienizarse 12hs antes. No pueden tomarse al mismo tiempo." },
-      { grupoA: ["905", "191", "O24"], grupoB: ["4040"], mensaje: "RECOLECCION DE ORINA DE 24HS CON ORINA COMPLETA: La ultima orina debe ser recolectada en un frasco esteril aparte de la recolección de orina de 24 horas." },
-      { grupoA: ["167"], grupoB: ["4040"], mensaje: "OXALATO/CITRATO URINARIO CON ORINA COMPLETA: Para Oxalato/citrato (recolección de orina de 24hs) tiene que recolectarse todas las orinas incluso la primera del segundo día. Debe dejar la orina completa pendiente y alcanzarla en otro momento." },
-      { grupoA: ["4019"], grupoB: ["4018"], mensaje: "EXUDADO URETRAL CON UROCULTIVO: El estudio de urocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
-      { grupoA: ["4019"], grupoB: ["4031"], mensaje: "EXUDADO URETRAL CON ESPERMOCULTIVO: El estudio de espermocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
-      { grupoA: ["4008"], grupoB: ["4018"], mensaje: "CULTIVO DE FLUJO VAGINAL Y MATERIAL ENDOCERVICAL CON UROCULTIVO FEMENINO: El estudio de urocultivo requiere higiene previa de la zona genital. El cultivo de flujo requiere que no se haga higiene profunda de la zona genital. Deberá hacerlo en momentos distintos." },
-      { grupoA: ["143"], grupoB: ["143-S"], mensaje: "CATECOLAMINAS URINARIAS (CON Y SIN CONSERVANTE): Si le piden de ambos casos debe hacer 2 recolecciones de 24 hs por separado. Una con conservante (retirando previamente el material por el laboratorio) y otra sin conservante." },
-      { grupoA: ["2708"], grupoB: ["19", "REN"], mensaje: "CATECOLAMINAS PLASMÁTICAS CON RENINA/ALDOSTERONA (Deambulación): Catecolaminas requiere reposo previo en sala de espera. Renina y aldosterona con deambulación no debe estar en reposo. Debe hacerlo en días separados." },
-      { grupoA: ["AMET"], grupoB: ["905", "191", "O24"], mensaje: "ACIDO METILMALONICO/ACIDOS ORGANICOS EN ORINA CON RECOLECCION DE 24HS: Deben hacerse por separado. Metilmalónico/organicos son muestras aisladas durante esas horas y recolección de 24hs son todas las micciones." },
-      { grupoA: ["PROL", "189", "6"], grupoB: ["19", "REN"], mensaje: "PROLACTINA - CORTISOL - ACTH Y RENINA - ALDOSTERONA: Prolactina, cortisol y ACTH debe asistir 7.30hs para hacer la extracción a las 8, con reposo previo. Renina y Aldosterona debe concurrir entre las 8 y las 9 con reposo o deambulación segun lo indicado. Hacer en días separados." },
-      { grupoA: ["PROL", "FSH", "LH", "1212", "75", "2711", "ESTR"], grupoB: ["PROG"], mensaje: "PERFIL HORMONAL CON PROGESTERONA: Los primeros se toman entre el día 3 y 5 del ciclo y la progesterona entre el 21 y 24 del mismo ciclo. Si están pedidos en la misma orden, deberá hacer dos extracciones en esos momentos diferentes, salvo otra indicación médica." }
-    ];
-
-    const estudiosBD = [
-      { codigo: "212", nombre: "Vitamina D, 25OHVitD, Calecalciferol, Hidroxicolecalciferol, Calcidiol", categoria: "General", ayunoHoras: 2, preparacion: "Vitamina D: Solo se realiza Vitamina D3." },
-      { codigo: "45", nombre: "Ácido Fólico, Folato, Vitamina B9", categoria: "General", ayunoHoras: 2 },
-      { codigo: "4651", nombre: "Alanina Aminotransferasa, ALT, ALAT, TGP", categoria: "General", ayunoHoras: 2 },
-      { codigo: "546", nombre: "Antitransglutaminada IGA, TTG, ATGA", categoria: "General", ayunoHoras: 2 },
-      { codigo: "621", nombre: "Orina 24 horas", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina 24hs: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
-      { codigo: "324", nombre: "Cannabinoides en orina, Marihuana, TCH", categoria: "Orina", ayunoHoras: 0, preparacion: "Cannabinoides: La muestra de orina será recolectada en el laboratorio bajo vigilancia. Deberá tener una retención urinaria de 3 horas como mínimo." },
-      { codigo: "89", nombre: "Cortisol, Cortisol matutino, Cortisol 8hs", categoria: "Hormonas", ayunoHoras: 2, preparacion: "Cortisol: Deberá presentarse a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00hs previo reposo." },
-      { codigo: "471", nombre: "Estradiol, E2", categoria: "General", ayunoHoras: 2 },
-      { codigo: "5018", nombre: "Colesterol Total, CT", categoria: "General", ayunoHoras: 8 },
-      { codigo: "63", nombre: "HIV I y II", categoria: "General", ayunoHoras: 2, preparacion: "HIV requiere presentar orden médica sí o sí." },
-      { codigo: "4075", nombre: "17-Hidroxiprogesterona, 17OHP4, 17 Alfa Hidroxiprogesterona", categoria: "General", ayunoHoras: 2, preparacion: "Progesterona: Realizar entre el día 21 y 24 del ciclo menstrual" },
-      { codigo: "4030", nombre: "Cultivo de Streptococcus Beta Hemolítico, SHBG", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Streptococcus: Deberá suspender antibióticos y relaciones sexuales 48 horas antes y no realizar higiene de la zona genital durante las 12 horas previas a la toma de la muestra." },
-      { codigo: "O24", nombre: "Creatinina en Orina, Clearence de creatinina", categoria: "Orina", ayunoHoras: 0, preparacion: "Clearence de creatinina: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. Anotar fecha y hora. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
-      { codigo: "167", nombre: "Oxalato y Citrato en Orina 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Oxalato: Evite 48 horas antes de realizar la recolección de orina tomar ácido ascórbico, té, mate, café y chocolate o comer alimentos que contengan oxalato como las espinacas, frutillas, tomates. Recolección de la muestra: Descarte la primera orina de la mañana, vaciando totalmente su vejiga, anote la hora. A partir de ese momento y hasta la misma hora del día siguiente, junte la totalidad de orina emitida, incluyendo la última. Es muy importante que no pierda ninguna de las muestras, ya que esto altera los resultados. Ejemplo: si se levanta a las 7:00hs. descarte esa primera orina y junte todas las muestras hasta las 7:00hs. de la mañana del día siguiente, incluyendo esta última muestra." },
-      { codigo: "4079", nombre: "Cultivo de Exudado Uretral", categoria: "Cultivos", ayunoHoras: 0, preparacion: "" },
-      { codigo: "4031", nombre: "Colesterol LDL, LDL", categoria: "General", ayunoHoras: 8 },
-      { codigo: "4008", nombre: "Cultivo de Flujo Vaginal y Endocervical", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Flujo: La toma de muestra se debe realizar entre el día 10 y 14 del ciclo menstrual. Deberá suspender relaciones sexuales y antibióticos 48 horas antes." },
-      { codigo: "143", nombre: "Catecolaminas Urinarias con conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Retirar frasco con conservante ácido del laboratorio previamente." },
-      { codigo: "143-S", nombre: "Catecolaminas Urinarias sin conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolectar orina 24hs en envase limpio sin agregados químicos." },
-      { codigo: "2708", nombre: "Catecolaminas Plasmáticas", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Requiere reposo previo prolongado en la sala de espera." },
-      { codigo: "19", nombre: "Aldosterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
-      { codigo: "REN", nombre: "Renina", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
-      { codigo: "4853", nombre: "Gonadotrofina Corionica Humana, HCG, Sub unidad Beta, SHBG", categoria: "General", ayunoHoras: 2},
-      { codigo: "4874", nombre: "Hemograma, HMG", categoria: "General", ayunoHoras: 2},
-      { codigo: "PROL", nombre: "Prolactina, PRL", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Asistir 7:30hs, reposo previo, extracción a las 8:00hs." },
-      { codigo: "6", nombre: "ACTH (Matutino 8am)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Prolactina: 24hs de abstinencia sexual, deberá contar con 2 horas de vigilia. Presentar a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00 previo reposo." },
-      { codigo: "FSH", nombre: "FSH (Hormona Foliculoestimulante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
-      { codigo: "LH", nombre: "LH (Hormona Luteinizante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
-      { codigo: "1212", nombre: "17-Hidroxiprogesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
-      { codigo: "ESTR", nombre: "Estradiol", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Estradiol: Extracción entre el día 3 y 5 del ciclo menstrual." },
-      { codigo: "PROG", nombre: "Progesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
-      { codigo: "15", nombre: "Albúmina en Sangre", categoria: "General", ayunoHoras: 8, preparacion: "Sin preparación específica." },
-      { codigo: "4040", nombre: "Orina Completa", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina Completa: Recolectar el chorro medio de una orina que tenga 3 horas de retención como mínimo, previa higiene de la zona genital." }
-    ];
-
-    let seleccionados = [];
-    let categoriaSeleccionada = "";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      cargarBotonesCategorias();
-      renderizarLista(estudiosBD);
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    });
-
-    function cargarBotonesCategorias() {
-      const contenedor = document.getElementById("botonesCategorias");
-      const categorias = [...new Set(estudiosBD.map(e => e.categoria))];
-      const emojis = { "Hormonas": "🧪", "General": "🔬", "Orina": "💧", "Cultivos": "🧫" };
-
-      let html = `<button onclick="filtrarPorCategoria('')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${categoriaSeleccionada === '' ? 'bg-[#70006a] text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">📋 Todos</button>`;
-      categorias.forEach(cat => {
-        const emoji = emojis[cat] || "🏷";
-        const activo = categoriaSeleccionada === cat;
-        html += `<button onclick="filtrarPorCategoria('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition ${activo ? 'bg-[#70006a] text-white shadow-sm' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${emoji}${cat}</button>`;
-      });
-      contenedor.innerHTML = html;
+    // Inicializar Iconos de Lucide
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
     }
 
-    function filtrarPorCategoria(cat) {
-      categoriaSeleccionada = cat;
-      cargarBotonesCategorias();
-      filtrarEstudios();
+    // Modal Documento
+    function openDocModal() {
+      document.getElementById('docModal').classList.remove('hidden');
+      document.getElementById('docModal').classList.add('flex');
     }
 
-    function filtrarEstudios() {
-      const texto = document.getElementById("buscador").value.toLowerCase();
-      const filtrados = estudiosBD.filter(e => {
-        const coincidenciaTexto = e.nombre.toLowerCase().includes(texto) || e.codigo.toLowerCase().includes(texto);
-        const coincideCat = categoriaSeleccionada === "" || e.categoria === categoriaSeleccionada;
-        return coincidenciaTexto && coincideCat;
-      });
-      renderizarLista(filtrados);
+    function closeDocModal() {
+      document.getElementById('docModal').classList.add('hidden');
+      document.getElementById('docModal').classList.remove('flex');
     }
 
-    function renderizarLista(estudios) {
-      const contenedor = document.getElementById("listaEstudios");
-      document.getElementById("contadorDisponibles").textContent = estudios.length;
-
-      if (estudios.length === 0) {
-        contenedor.innerHTML = `<p class="text-slate-400 text-sm text-center py-8">No se encontraron estudios.</p>`;
-        return;
-      }
-
-      contenedor.innerHTML = estudios.map(e => {
-        const estaSeleccionado = seleccionados.some(s => s.codigo === e.codigo);
-        return `
-          <div onclick="toggleEstudio('${e.codigo}')" class="p-3 border rounded-lg cursor-pointer transition flex items-center justify-between text-sm ${estaSeleccionado ? 'bg-pink-50/80 border-pink-300 shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300'}">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" ${estaSeleccionado ? 'checked' : ''} onclick="event.stopPropagation(); toggleEstudio('${e.codigo}')" class="rounded text-[#70006a] focus:ring-[#70006a] w-4 h-4 cursor-pointer">
-              <div>
-                <span class="font-semibold text-slate-800">${e.nombre}</span>
-                <span class="text-xs text-slate-500 block">${e.categoria} (Cód: ${e.codigo})</span>
-              </div>
-            </div>
-            ${e.ayunoHoras > 0 ? `<span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">Ayuno ${e.ayunoHoras}h</span>` : ''}
-          </div>
-        `;
-      }).join('');
+    // Zoom / Lightbox de imágenes
+    function zoomImage(src) {
+      document.getElementById('zoomedImage').src = src;
+      document.getElementById('imageLightbox').classList.remove('hidden');
+      document.getElementById('imageLightbox').classList.add('flex');
     }
 
-    function toggleEstudio(codigo) {
-      const index = seleccionados.findIndex(s => s.codigo === codigo);
-      if (index > -1) {
-        seleccionados.splice(index, 1);
-      } else {
-        const estudio = estudiosBD.find(e => e.codigo === codigo);
-        if (estudio) seleccionados.push(estudio);
-      }
-      filtrarEstudios();
-      actualizarSeleccion();
-      actualizarPreparaciones();
-    }
-
-    function limpiarSeleccion() {
-      seleccionados = [];
-      filtrarEstudios();
-      actualizarSeleccion();
-      actualizarPreparaciones();
-    }
-
-    function actualizarSeleccion() {
-      document.getElementById("contadorSeleccionados").textContent = seleccionados.length;
-      const tagsContainer = document.getElementById("tagsSeleccionados");
-      const btnWhatsApp = document.getElementById("btnWhatsApp");
-      btnWhatsApp.disabled = seleccionados.length === 0;
-
-      if (seleccionados.length === 0) {
-        tagsContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>`;
-        return;
-      }
-
-      tagsContainer.innerHTML = seleccionados.map(e => `
-        <span class="inline-flex items-center gap-1 bg-pink-100 text-[#70006a] text-xs px-2.5 py-1 rounded-md font-medium">
-          ${e.nombre}
-          <button onclick="toggleEstudio('${e.codigo}')" class="hover:text-pink-950 font-bold ml-0.5">×</button>
-        </span>
-      `).join('');
-    }
-
-    function actualizarPreparaciones() {
-      const preparacionesContenedor = document.getElementById('preparacionesContenedor');
-      if (!preparacionesContenedor) return;
-
-      if (seleccionados.length === 0) {
-        preparacionesContenedor.innerHTML = `
-          <div class="text-center text-slate-500 py-12 print:hidden">
-            <i data-lucide="clipboard-list" class="w-16 h-16 mx-auto mb-4 text-slate-300"></i>
-            <p class="text-lg">Tus indicaciones aparecerán aquí.</p>
-            <p class="text-sm mt-2">Agregá estudios para detectar reglas e incompatibilidades.</p>
-          </div>
-        `;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-        return;
-      }
-
-      let alertasIncompatibilidad = [];
-      reglasIncompatibilidades.forEach(regla => {
-          const hayGrupoA = regla.grupoA.some(cod => seleccionados.some(s => s.codigo === cod));
-          const hayGrupoB = regla.grupoB.some(cod => seleccionados.some(s => s.codigo === cod));
-          if (hayGrupoA && hayGrupoB) {
-              alertasIncompatibilidad.push(regla.mensaje);
-          }
-      });
-
-      let maxAyuno = 0;
-      const preparacionesUnicas = new Set();
-      const nombresEstudios = [];
-
-      seleccionados.forEach(e => {
-        nombresEstudios.push(e.nombre);
-        if (e.ayunoHoras > maxAyuno) maxAyuno = e.ayunoHoras;
-        if (e.preparacion && e.preparacion !== "Sin preparación específica") {
-          preparacionesUnicas.add(e.preparacion);
-        }
-      });
-
-      let htmlPreparaciones = ``;
-
-      if (alertasIncompatibilidad.length > 0) {
-          htmlPreparaciones += `
-            <div class="flex items-start gap-2.5 text-rose-800 bg-rose-50 p-4 rounded-xl mb-4 border border-rose-200 shadow-sm alert-print" style="font-size: 72%;">
-              <i data-lucide="alert-triangle" class="w-6 h-6 flex-shrink-0 mt-0.5 print:hidden text-rose-600"></i>
-              <div>
-                  <strong class="block mb-2 text-rose-900 text-base">¡Atención! Incompatibilidad detectada:</strong>
-                  <ul class="list-disc pl-5 space-y-2">
-                      ${alertasIncompatibilidad.map(alerta => `<li>${alerta}</li>`).join('')}
-                  </ul>
-              </div>
-            </div>
-          `;
-      }
-
-      htmlPreparaciones += `
-        <div class="bg-white border border-slate-200 rounded-xl p-5 mb-4 shadow-sm prep-card">
-          <div class="mb-5 pb-4 border-b border-slate-200">
-            <h3 class="text-indigo-900 font-bold text-lg flex items-center gap-2 mb-3">
-               <i data-lucide="list-checks" class="w-5 h-5 text-indigo-500 print:hidden"></i>
-               Estudios a realizar:
-            </h3>
-            <ul class="list-disc pl-5 text-slate-700 space-y-1" style="font-size: 72%;">
-              ${nombresEstudios.map(nombre => `<li><strong>${nombre}</strong></li>`).join('')}
-            </ul>
-          </div>
-      `;
-
-      if (maxAyuno > 0) {
-        htmlPreparaciones += `
-          <div class="flex items-center gap-2 text-amber-800 bg-amber-50 px-4 py-3 rounded-lg mb-5 border border-amber-200" style="font-size: 72%;">
-            <i data-lucide="clock" class="w-5 h-5 flex-shrink-0 print:hidden"></i>
-            <span><strong>Ayuno Mínimo Requerido:</strong> Se requiere un ayuno de <strong>${maxAyuno} horas</strong> antes de la extracción.</span>
-          </div>
-        `;
-      }
-
-      htmlPreparaciones += `
-          <div>
-            <h4 class="text-indigo-900 font-bold text-md mb-3 flex items-center gap-2">
-              <i data-lucide="info" class="w-5 h-5 text-indigo-500 print:hidden"></i>
-              Preparaciones adicionales necesarias:
-            </h4>
-            <div class="text-slate-700 leading-relaxed" style="font-size: 72%;">
-      `;
-
-      if (preparacionesUnicas.size === 0) {
-         htmlPreparaciones += `<p class="italic text-slate-500">No se requiere ninguna preparación específica para estos estudios.</p>`;
-      } else {
-         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-3">`;
-         Array.from(preparacionesUnicas).forEach(prep => {
-            htmlPreparaciones += `<li>${prep}</li>`;
-         });
-         htmlPreparaciones += `</ul>`;
-      }
-
-      htmlPreparaciones += `
-            </div>
-          </div>
-        </div>
-        
-        <div class="mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-700 rounded-r-lg shadow-sm disclaimer-print">
-            <p class="text-indigo-900 print:text-black font-medium flex items-start gap-2" style="font-size: 72%;">
-                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5 text-indigo-700 print:hidden"></i>
-                <span><strong>Aviso importante:</strong> Lea atentamente estas instrucciones, su cumplimiento es imprescindible para garantizar la calidad de sus resultados.</span>
-            </p>
-        </div>
-      `;
-
-      preparacionesContenedor.innerHTML = htmlPreparaciones;
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    function enviarWhatsApp() {
-      if (seleccionados.length === 0) return;
-
-      let alertasIncompatibilidad = [];
-      reglasIncompatibilidades.forEach(regla => {
-          const hayGrupoA = regla.grupoA.some(cod => seleccionados.some(s => s.codigo === cod));
-          const hayGrupoB = regla.grupoB.some(cod => seleccionados.some(s => s.codigo === cod));
-          if (hayGrupoA && hayGrupoB) alertasIncompatibilidad.push(regla.mensaje);
-      });
-
-      let maxAyuno = 0;
-      const preparacionesUnicas = new Set();
-      const nombresEstudios = [];
-
-      seleccionados.forEach(e => {
-        nombresEstudios.push(e.nombre);
-        if (e.ayunoHoras > maxAyuno) maxAyuno = e.ayunoHoras;
-        if (e.preparacion && e.preparacion !== "Sin preparación específica") {
-          preparacionesUnicas.add(e.preparacion);
-        }
-      });
-
-      let mensaje = "*INDICACIONES DE PREPARACIÓN MÉDICA*\n\n";
-
-      if (alertasIncompatibilidad.length > 0) {
-        mensaje += "🚫 *ATENCIÓN - ESTUDIOS INCOMPATIBLES:*\n";
-        alertasIncompatibilidad.forEach(alerta => {
-            mensaje += `• ${alerta}\n`;
-        });
-        mensaje += "\n";
-      }
-      
-      mensaje += "*Estudios solicitados:*\n";
-      nombresEstudios.forEach(nombre => {
-        mensaje += `• ${nombre}\n`;
-      });
-
-      mensaje += "\n*Resumen de indicaciones:*\n";
-      if (maxAyuno > 0) mensaje += `⏰ *Ayuno mínimo:* ${maxAyuno} horas.\n\n`;
-
-      if (preparacionesUnicas.size > 0) {
-        mensaje += "*Preparaciones adicionales:*\n";
-        Array.from(preparacionesUnicas).forEach(prep => {
-            mensaje += `👉 ${prep}\n\n`;
-        });
-      } else {
-        mensaje += "_No se requiere preparación específica._\n\n";
-      }
-
-      mensaje += "⚠️ *Aviso importante:* _Su cumplimiento es imprescindible para garantizar la calidad de sus resultados._\n";
-
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
+    function closeZoom() {
+      document.getElementById('imageLightbox').classList.add('hidden');
+      document.getElementById('imageLightbox').classList.remove('flex');
     }
   </script>
 </body>
